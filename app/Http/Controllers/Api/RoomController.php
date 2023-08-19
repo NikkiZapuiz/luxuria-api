@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RoomUpdateRequest;
 use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -53,16 +54,32 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RoomUpdateRequest $request, Room $room)
     {
-        //
+        if (isset($request->roomNumber)) {
+            $room->room_number = $request->roomNumber;
+        }
+        if (isset($request->roomType)) {
+            $room->room_type = $request->roomType;
+        }
+        if (isset($request->isAvailable)) {
+            $room->is_available = $request->isAvailable;
+        }
+
+        $room->save();
+
+        return RoomResource::make($room);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
-        //
+        $room->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully deleted'
+        ]);
     }
 }
