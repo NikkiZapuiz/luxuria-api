@@ -24,6 +24,8 @@ class ReservationResource extends JsonResource
             'checkoutDate' => Carbon::parse($this->checkout_date)->format('M d, Y'),
             'adultCount' => $this->adult_count,
             'childCount' => $this->child_count,
+            'guest' => UserResource::make($this->whenLoaded('user')),
+            'room' => RoomResource::make($this->whenLoaded('room')),
         ];
     }
 }

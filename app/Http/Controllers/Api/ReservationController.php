@@ -15,9 +15,14 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ReservationResource::collection(Reservation::all());
+        $query = Reservation::query();
+
+        if (isset($request->checkinDate)) {
+            $query->where('checkin_date', $request->checkinDate);
+        }
+        return ReservationResource::collection($query->with('user')->get());
     }
 
     
@@ -43,7 +48,7 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        return ReservationResource::make($reservation);
+        return ReservationResource::make($reservation->loadMissing('room')->loadMissing('user'));
     }
 
 

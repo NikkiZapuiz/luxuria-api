@@ -19,12 +19,12 @@ class Reservation extends Model
         'child_count',
     ];
 
-    public function hotel_guests()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function rooms()
+    public function room()
     {
         return $this->belongsTo(Room::class);
     }
